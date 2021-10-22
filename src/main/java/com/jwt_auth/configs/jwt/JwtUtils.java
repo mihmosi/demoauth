@@ -13,29 +13,31 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-
-    @Value("${app.jwtSecret")
+    // ВВОДИМ ПЕРЕМЕННЫЕ
+    @Value("${app.jwtSecret}")
     private String jwtSecret;
-    @Value("${app.jwtExpirationMs")
+    @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    // ГЕНЕРИРУЕМ ТОКЕН ДЛЯ ОТДАЧИ КЛИЕНТУ
     public String generateJwtToken(Authentication authentication) {
-
+        // ПРИНИМАЕМ ЮЗЕРА ДЛЯ ПОДТВЕРЖДЕНИЯ
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+// СОЗДАЕМ ГОТОТВЫЙ ТОКЕН С ИМЕНЕМ, ТЕЛОМ И ПОПИСЬЮ И ==== ШИФРУЕМ
         return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
+
+    // В ОТВЕТ НА ЗАПРОС С КЛИЕНТА ПРОВЕРЯЕМ И ПОДТВЕРЖДАЕМ ПОДЛИННОСТЬ
     public boolean validateJwtToken(String jwt) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt);
-            return true;
+            return true;  // ЕСЛИ ВАЛИДНЫЙ
         } catch (MalformedJwtException | IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
-
         return false;
     }
 

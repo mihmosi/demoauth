@@ -11,9 +11,9 @@ public class JwtResponse {
     private Long id;
     private String username;
     private String email;
-    private List<Role> roles;
+    private List<String> roles;
 
-    public JwtResponse(String token, Long id, String username, String email, List<Role> roles) {
+    public JwtResponse(String token, Long id, String username, String email, List<String> roles) {
         this.token = token;
         this.id = id;
         this.username = username;
@@ -61,11 +61,11 @@ public class JwtResponse {
         this.email = email;
     }
 
-    public List<Role> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 }
